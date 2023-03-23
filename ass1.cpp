@@ -4,6 +4,13 @@ Roll no: 251686775*/
 
 #include <iostream>
 #include <cstdlib>
+#include <conio.h>
+
+// define arrow keys for user input
+#define up 72
+#define down 80
+#define left 75
+#define right 77
 
 using namespace std;
 
@@ -54,6 +61,135 @@ void generate_tile()
     }
 }
 
+// movement functions
+void move_right()
+{
+    // get the grid array pointer
+    int(*grid)[4] = game_grid();
+
+    // move tiles to the right and merge adjacent tiles of the same value
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 2; j >= 0; j--)
+        {
+            if (grid[i][j] != 0)
+            {
+                int k = j;
+                while (k < 3 && grid[i][k + 1] == 0)
+                {
+                    grid[i][k + 1] = grid[i][k];
+                    grid[i][k] = 0;
+                    k++;
+                }
+
+                if (k < 3 && grid[i][k + 1] == grid[i][k])
+                {
+                    grid[i][k + 1] *= 2;
+                    grid[i][k] = 0;
+                    tile_counter--;
+                }
+            }
+        }
+    }
+}
+
+void move_up()
+{
+    // get the grid array pointer
+    int(*grid)[4] = game_grid();
+
+    // move tiles up and merge adjacent tiles of the same value
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (grid[i][j] != 0)
+            {
+                int k = i;
+                while (k > 0 && grid[k - 1][j] == 0)
+                {
+                    grid[k - 1][j] = grid[k][j];
+                    grid[k][j] = 0;
+                    k--;
+                }
+
+                if (k > 0 && grid[k - 1][j] == grid[k][j])
+                {
+                    grid[k - 1][j] *= 2;
+                    grid[k][j] = 0;
+                    tile_counter--;
+                }
+            }
+        }
+    }
+}
+
+void move_down()
+{
+    int(*grid)[4] = game_grid();
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 3; i >= 0; i--)
+        {
+            if (grid[i][j] != 0)
+            {
+                int k = i + 1;
+                while (k < 4 && grid[k][j] == 0)
+                {
+                    k++;
+                }
+
+                if (k - 1 != i)
+                {
+                    grid[k - 1][j] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+
+                if (k < 4 && grid[k][j] == grid[k - 1][j])
+                {
+                    grid[k][j] *= 2;
+                    grid[k - 1][j] = 0;
+                    tile_counter--;
+                }
+            }
+        }
+    }
+}
+
+void move_left()
+{
+    int(*grid)[4] = game_grid();
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (grid[i][j] != 0)
+            {
+                int k = i - 1;
+                while (k >= 0 && grid[k][j] == 0)
+                {
+                    k--;
+                }
+
+                if (k + 1 != i)
+                {
+                    grid[k + 1][j] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+
+                if (k >= 0 && grid[k][j] == grid[k + 1][j])
+                {
+                    grid[k][j] *= 2;
+                    grid[k + 1][j] = 0;
+                    tile_counter--;
+                }
+            }
+        }
+    }
+}
+
 void display_grid()
 {
     // get the grid array pointer
@@ -77,25 +213,38 @@ int main()
     generate_tile();
     generate_tile();
 
-    string user_input;
-    while (user_input != "exit")
+    int user_input = 0;
+    bool exit_game = false;
+    while (!exit_game)
     {
         system("cls");
         display_grid();
-        cout << "Press any key: ";
-        cin >> user_input;
+        cout << "Press any arrow key: ";
 
-        if (user_input != "exit")
+        switch ((user_input = getch()))
         {
-            if (tile_counter == 16)
-            {
-                cout << "Game Over!" << endl;
-                user_input = "exit";
-            }
-            else
-            {
-                generate_tile();
-            }
+        case up:
+            move_up();
+            generate_tile();
+            break;
+        case down:
+            move_down();
+            generate_tile();
+            break;
+        case left:
+            move_left();
+            generate_tile();
+            break;
+        case right:
+            move_right();
+            generate_tile();
+            break;
+        }
+
+        if (tile_counter == 16)
+        {
+            cout << "Game Over!" << endl;
+            exit_game = true;
         }
     }
 
