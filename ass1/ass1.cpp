@@ -163,9 +163,11 @@ void move_left()
 
     for (int j = 0; j < 4; j++)
     {
-        for (int i = 1; i < 4; i++) // start from i = 1 instead of i = 0
+        // start from i = 1
+        for (int i = 1; i < 4; i++)
         {
-            if (grid[j][i] != 0) // swap i and j to update the correct element
+            // swap i and j to update the correct element
+            if (grid[j][i] != 0)
             {
                 int k = i - 1;
                 while (k >= 0 && grid[j][k] == 0)
