@@ -17,7 +17,7 @@ using namespace std;
 // global occupied tile counter
 int tile_counter = 0;
 
-// grid function creates and contains tiles
+// grid function initializes tiles
 // make array a pointer to return it
 int (*game_grid())[4]
 {
@@ -163,26 +163,26 @@ void move_left()
 
     for (int j = 0; j < 4; j++)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 1; i < 4; i++) // start from i = 1 instead of i = 0
         {
-            if (grid[i][j] != 0)
+            if (grid[j][i] != 0) // swap i and j to update the correct element
             {
                 int k = i - 1;
-                while (k >= 0 && grid[k][j] == 0)
+                while (k >= 0 && grid[j][k] == 0)
                 {
                     k--;
                 }
 
                 if (k + 1 != i)
                 {
-                    grid[k + 1][j] = grid[i][j];
-                    grid[i][j] = 0;
+                    grid[j][k + 1] = grid[j][i];
+                    grid[j][i] = 0;
                 }
 
-                if (k >= 0 && grid[k][j] == grid[k + 1][j])
+                if (k >= 0 && grid[j][k] == grid[j][k + 1])
                 {
-                    grid[k][j] *= 2;
-                    grid[k + 1][j] = 0;
+                    grid[j][k] *= 2;
+                    grid[j][k + 1] = 0;
                     tile_counter--;
                 }
             }
