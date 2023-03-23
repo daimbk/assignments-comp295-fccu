@@ -7,45 +7,51 @@ Roll no: 251686775*/
 
 using namespace std;
 
+// global occupied tile counter
+int tile_counter = 0;
+
 // grid function creates and contains tiles
 // make array a pointer to return it
 int (*game_grid())[4]
 {
     static int grid[4][4] = {0};
+    return grid;
+}
 
-    // generate 2 random tiles with 2 or 4
-    // set seed
-    srand(time(0));
+void generate_tile()
+{
+    // check to see if grid is full (no moves left)
+    if (tile_counter == 16)
+    {
+        return;
+    }
 
-    int tile_score = rand() % 2;
+    // get the grid array pointer
+    int(*grid)[4] = game_grid();
+
+    // get grid coordinates for rand empty tile
     int i = rand() % 4;
     int j = rand() % 4;
+    while (grid[i][j] != 0)
+    {
+        i = rand() % 4;
+        j = rand() % 4;
+    }
+
+    // get tile score
+    int tile_score = rand() % 2;
     if (tile_score == 0)
     {
         tile_score = 2;
         grid[i][j] = tile_score;
+        tile_counter++;
     }
     else
     {
         tile_score = 4;
         grid[i][j] = tile_score;
+        tile_counter++;
     }
-
-    int second_tile_score = rand() % 2;
-    i = rand() % 4;
-    j = rand() % 4;
-    if (second_tile_score == 0)
-    {
-        second_tile_score = 2;
-        grid[i][j] = second_tile_score;
-    }
-    else
-    {
-        second_tile_score = 4;
-        grid[i][j] = second_tile_score;
-    }
-
-    return grid;
 }
 
 void display_grid()
@@ -65,6 +71,12 @@ void display_grid()
 
 int main()
 {
+    // set seed
+    srand(time(0));
+    // initialize first two tiles
+    generate_tile();
+    generate_tile();
+
     string user_input;
     while (user_input != "exit")
     {
@@ -72,6 +84,19 @@ int main()
         display_grid();
         cout << "Press any key: ";
         cin >> user_input;
+
+        if (user_input != "exit")
+        {
+            if (tile_counter == 16)
+            {
+                cout << "Game Over!" << endl;
+                user_input = "exit";
+            }
+            else
+            {
+                generate_tile();
+            }
+        }
     }
 
     return 0;
