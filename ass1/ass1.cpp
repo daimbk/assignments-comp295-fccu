@@ -6,13 +6,13 @@ Roll no: 251686775*/
 #include <cstdlib>
 #include <conio.h>
 
+using namespace std;
+
 // define arrow keys for user input
 #define up 72
 #define down 80
 #define left 75
 #define right 77
-
-using namespace std;
 
 // global occupied tile counter
 int tile_counter = 0;
@@ -197,14 +197,31 @@ void display_grid()
     // get the grid array pointer
     int(*grid)[4] = game_grid();
 
+    // print top border line
+    printf("/------|------|------|------\\\n");
+
     for (int i = 0; i < 4; i++)
     {
+        // print left border line
+        printf("|");
+
         for (int j = 0; j < 4; j++)
         {
-            cout << grid[i][j] << "\t";
+            // print cell value with fixed width
+            printf(" %4d ", grid[i][j]);
+
+            // add right border line
+            printf("|");
         }
-        cout << endl;
+
+        // print new line and bottom border line
+        printf("\n");
+        if (i != 3)
+        {
+            printf("|------|------|------|------|\n");
+        }
     }
+    printf("\\------|------|------|------/\n");
 }
 
 int main()
