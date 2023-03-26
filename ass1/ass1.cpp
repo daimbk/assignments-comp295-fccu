@@ -17,6 +17,9 @@ using namespace std;
 // global occupied tile counter
 int tile_counter = 0;
 
+// global score and high score
+int score = 0, high_score = 0;
+
 // grid function initializes tiles
 // make array a pointer to return it
 int (*game_grid())[4]
@@ -87,6 +90,9 @@ void move_right()
                     grid[i][k + 1] *= 2;
                     grid[i][k] = 0;
                     tile_counter--;
+
+                    // update score
+                    score += grid[i][k + 1];
                 }
             }
         }
@@ -118,6 +124,9 @@ void move_up()
                     grid[k - 1][j] *= 2;
                     grid[k][j] = 0;
                     tile_counter--;
+
+                    // update score
+                    score += grid[k - 1][j];
                 }
             }
         }
@@ -130,7 +139,7 @@ void move_down()
 
     for (int j = 0; j < 4; j++)
     {
-        for (int i = 3; i >= 0; i--)
+        for (int i = 2; i >= 0; i--)
         {
             if (grid[i][j] != 0)
             {
@@ -151,6 +160,9 @@ void move_down()
                     grid[k][j] *= 2;
                     grid[k - 1][j] = 0;
                     tile_counter--;
+
+                    // update score
+                    score += grid[k][j];
                 }
             }
         }
@@ -163,8 +175,7 @@ void move_left()
 
     for (int j = 0; j < 4; j++)
     {
-        // start from i = 1
-        for (int i = 1; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             // swap i and j to update the correct element
             if (grid[j][i] != 0)
@@ -186,6 +197,9 @@ void move_left()
                     grid[j][k] *= 2;
                     grid[j][k + 1] = 0;
                     tile_counter--;
+
+                    // update score
+                    score += grid[j][k];
                 }
             }
         }
@@ -197,6 +211,7 @@ void display_grid()
     // get the grid array pointer
     int(*grid)[4] = game_grid();
 
+    // using printf to have formatting in display using %4d
     // print top border line
     printf("/------|------|------|------\\\n");
 
@@ -234,10 +249,14 @@ int main()
 
     int user_input = 0;
     bool exit_game = false;
-    while (!exit_game)
+
+    while (!exit_game || score != 2048)
     {
         system("cls");
         display_grid();
+        // print score and high score
+        cout << "Score: " << score << endl;
+        cout << "High Score: " << high_score << endl;
         cout << "Press any arrow key: ";
 
         switch ((user_input = getch()))
@@ -260,11 +279,21 @@ int main()
             break;
         }
 
-        if (tile_counter == 16)
+        if (tile_counter == 16 || score == 2048)
         {
-            cout << "Game Over!" << endl;
+            high_score = score;
             exit_game = true;
         }
+    }
+
+    if (tile_counter == 16)
+    {
+        cout << "\nGame Over!" << endl;
+    }
+    else if (score == 2048)
+    {
+        cout << "\nYou Won!" << endl;
+        cout << "Winning Score: " << score << endl;
     }
 
     return 0;
