@@ -19,25 +19,47 @@ int tile_counter = 0;
 
 // global score and high score
 int score = 0, high_score = 0;
+bool game_over = false;
 
-// grid function initializes tiles
-// make array a pointer to return it
-int (*game_grid())[4]
+// global grid
+int grid[4][4] = {0};
+
+// func to check if any moves are left
+// called in generate_tile()
+bool check_game_over()
 {
-    static int grid[4][4] = {0};
-    return grid;
+    // Check for available moves
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            // Check for empty cells
+            if (grid[i][j] == 0)
+            {
+                return false;
+            }
+
+            // Check for adjacent cells with the same value
+            if ((i < 4 - 1 && grid[i][j] == grid[i + 1][j]) ||
+                (j < 4 - 1 && grid[i][j] == grid[i][j + 1]))
+            {
+                return false;
+            }
+        }
+    }
+
+    // No available moves left
+    return true;
 }
 
 void generate_tile()
 {
     // check to see if grid is full (no moves left)
-    if (tile_counter == 16)
+    if (tile_counter == 16 && check_game_over())
     {
+        game_over = true;
         return;
     }
-
-    // get the grid array pointer
-    int(*grid)[4] = game_grid();
 
     // get grid coordinates for rand empty tile
     int i = rand() % 4;
@@ -67,9 +89,6 @@ void generate_tile()
 // movement functions
 void move_right()
 {
-    // get the grid array pointer
-    int(*grid)[4] = game_grid();
-
     // move tiles to the right and merge adjacent tiles of the same value
     for (int i = 0; i < 4; i++)
     {
@@ -81,6 +100,7 @@ void move_right()
                 while (k < 3 && grid[i][k + 1] == 0)
                 {
                     grid[i][k + 1] = grid[i][k];
+                    // reset previous merged value to zero
                     grid[i][k] = 0;
                     k++;
                 }
@@ -97,13 +117,13 @@ void move_right()
             }
         }
     }
+
+    // generate new tile
+    generate_tile();
 }
 
 void move_up()
 {
-    // get the grid array pointer
-    int(*grid)[4] = game_grid();
-
     // move tiles up and merge adjacent tiles of the same value
     for (int j = 0; j < 4; j++)
     {
@@ -131,12 +151,13 @@ void move_up()
             }
         }
     }
+
+    // generate new tile
+    generate_tile();
 }
 
 void move_down()
 {
-    int(*grid)[4] = game_grid();
-
     for (int j = 0; j < 4; j++)
     {
         for (int i = 2; i >= 0; i--)
@@ -167,12 +188,13 @@ void move_down()
             }
         }
     }
+
+    // generate new tile
+    generate_tile();
 }
 
 void move_left()
 {
-    int(*grid)[4] = game_grid();
-
     for (int j = 0; j < 4; j++)
     {
         for (int i = 0; i < 4; i++)
@@ -204,13 +226,13 @@ void move_left()
             }
         }
     }
+
+    // generate new tile
+    generate_tile();
 }
 
 void display_grid()
 {
-    // get the grid array pointer
-    int(*grid)[4] = game_grid();
-
     // using printf to have formatting in display using %4d
     // print top border line
     printf("/------|------|------|------\\\n");
@@ -250,7 +272,7 @@ int main()
     int user_input = 0;
     bool exit_game = false;
 
-    while (!exit_game || score != 2048)
+    while (!exit_game)
     {
         system("cls");
         display_grid();
@@ -259,41 +281,43 @@ int main()
         cout << "High Score: " << high_score << endl;
         cout << "Press any arrow key: ";
 
+        // switch case for arrow input
         switch ((user_input = getch()))
         {
         case up:
             move_up();
-            generate_tile();
             break;
         case down:
             move_down();
-            generate_tile();
             break;
         case left:
             move_left();
-            generate_tile();
             break;
         case right:
             move_right();
-            generate_tile();
             break;
         }
 
-        if (tile_counter == 16 || score == 2048)
+        if (game_over == true)
         {
             high_score = score;
+            system("cls");
+            display_grid();
+            // print score and high score
+            cout << "Score: " << score << endl;
+            cout << "High Score: " << high_score << endl;
+            cout << "Game Over" << endl;
             exit_game = true;
         }
-    }
-
-    if (tile_counter == 16)
-    {
-        cout << "\nGame Over!" << endl;
-    }
-    else if (score == 2048)
-    {
-        cout << "\nYou Won!" << endl;
-        cout << "Winning Score: " << score << endl;
+        else if (score == 2048)
+        {
+            high_score = score;
+            system("cls");
+            display_grid();
+            cout << "High Score: " << high_score << endl;
+            cout << "\nYou Won!" << endl;
+            cout << "Winning Score: " << score << endl;
+        }
     }
 
     return 0;
