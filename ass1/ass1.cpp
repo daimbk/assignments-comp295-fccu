@@ -14,15 +14,12 @@ using namespace std;
 #define left 75
 #define right 77
 
-// global occupied tile counter
-int tile_counter = 0;
-
-// global score and high score
+// global variables
+int grid[4][4] = {0}; // global grid
+int tile_counter = 0; // occupied tile counter
 int score = 0, high_score = 0;
-bool game_over = false;
-
-// global grid
-int grid[4][4] = {0};
+int largest_tile;       // var to store largest tile score
+bool game_over = false; // bool for running main loop
 
 // func to check if any moves are left
 // called in generate_tile()
@@ -231,6 +228,22 @@ void move_left()
     generate_tile();
 }
 
+void get_largest_tile()
+{
+    // func to get the largest tile in the grid
+    int largest_tile;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (largest_tile < grid[i][j])
+            {
+                largest_tile = grid[i][j];
+            }
+        }
+    }
+}
+
 void display_grid()
 {
     // using printf to have formatting in display using %4d
@@ -271,6 +284,7 @@ int main()
 
     int user_input = 0;
     bool exit_game = false;
+    string play_again;
 
     while (!exit_game)
     {
@@ -307,9 +321,34 @@ int main()
             cout << "Score: " << score << endl;
             cout << "High Score: " << high_score << endl;
             cout << "Game Over" << endl;
-            exit_game = true;
+
+            // play again logic
+            cout << "Play Again? (Y/N) " << endl;
+            cin >> play_again;
+            if (play_again == "y" || play_again == "Y")
+            {
+                // reset the grid
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        grid[i][j] = 0;
+                    }
+                }
+                // reset the score
+                score = 0;
+                largest_tile = 0;
+                game_over = false;
+                // generate new tiles
+                generate_tile();
+                generate_tile();
+            }
+            else if (play_again == "n" || play_again == "N")
+            {
+                exit_game = true;
+            }
         }
-        else if (score == 2048)
+        else if (largest_tile >= 2048)
         {
             high_score = score;
             system("cls");
@@ -317,6 +356,32 @@ int main()
             cout << "High Score: " << high_score << endl;
             cout << "\nYou Won!" << endl;
             cout << "Winning Score: " << score << endl;
+
+            // play again logic
+            cout << "Play Again? (Y/N) " << endl;
+            cin >> play_again;
+            if (play_again == "y" || play_again == "Y")
+            {
+                // reset the grid
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        grid[i][j] = 0;
+                    }
+                }
+                // reset the score
+                score = 0;
+                largest_tile = 0;
+                game_over = false;
+                // generate new tiles
+                generate_tile();
+                generate_tile();
+            }
+            else if (play_again == "n" || play_again == "N")
+            {
+                exit_game = true;
+            }
         }
     }
 
