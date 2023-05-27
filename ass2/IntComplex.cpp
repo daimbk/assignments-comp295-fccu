@@ -40,3 +40,14 @@ IntComplex IntComplex::operator/(const IntComplex &object)
     int imag_div = ((imaginary * object.real) - (real * object.imaginary)) / denom; // ((b * c) - (a * d)) / (c^2 + d^2)
     return IntComplex(real_div, imag_div);
 }
+
+// getter functions
+int IntComplex::getReal() const
+{
+    return real;
+}
+
+int IntComplex::getImaginary() const
+{
+    return imaginary;
+}
