@@ -1,5 +1,4 @@
 #include "IntComplex.h"
-#include <cmath>
 
 // define constructor
 IntComplex::IntComplex(int real_input, int imaginary_input)
@@ -36,7 +35,7 @@ IntComplex IntComplex::operator*(const IntComplex &object)
 IntComplex IntComplex::operator/(const IntComplex &object)
 {
     // (a + bi) / (c + di)
-    int denom = pow((object.real), 2) + pow((object.imaginary), 2);                 // (c^2 + d^2) is denominator
+    int denom = (object.real * object.real) + (object.imaginary * object.imaginary); // (c^2 + d^2) is denominator
     int real_div = ((real * object.real) + (imaginary * object.imaginary)) / denom; // ((a * c) + (b * d)) / (c^2 + d^2)
     int imag_div = ((imaginary * object.real) - (real * object.imaginary)) / denom; // ((b * c) - (a * d)) / (c^2 + d^2)
     return IntComplex(real_div, imag_div);
