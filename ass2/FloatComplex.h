@@ -18,6 +18,10 @@ public:
     FloatComplex operator-(const FloatComplex &object);
     FloatComplex operator*(const FloatComplex &object);
     FloatComplex operator/(const FloatComplex &object);
+    
+    // getter functions
+    float getReal() const;
+    float getImaginary() const;
 };
 
 #endif
