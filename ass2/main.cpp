@@ -4,34 +4,32 @@
 
 using std::cout, std::cin, std::endl, std::abs;
 
-int main()
+// using command line arguments
+int main(int argc, char *argv[])
 {
-    // for intComplex object
-    int real_int = 0, imag_int = 0;
-    int real2_int = 0, imag2_int = 0;
-
-    // loop only stops when all inputs are entered
-    while (real_int == 0 and imag_int == 0 and real2_int == 0 and imag2_int == 0)
+    // run if 8 numbers are entered to make 4 points
+    if (argc < 8)
     {
-        cout << "Enter 4 integer numbers. First 2 for complex number 1 and rest for number 2: ";
-        cin >> real_int >> imag_int >> real2_int >> imag2_int;
+        std::cout << "Incorrect. Enter 4 integers and 4 floats for 2 each complex numbers." << std::endl;
+        return 1;
     }
+
+    // access command line arguments and convert to integer and floats
+    int real_int = std::stoi(argv[1]);
+    int imag_int = std::stoi(argv[2]);
+    int real2_int = std::stoi(argv[3]);
+    int imag2_int = std::stoi(argv[4]);
+
+    float real_f = std::stof(argv[5]);
+    float imag_f = std::stof(argv[6]);
+    float real2_f = std::stof(argv[7]);
+    float imag2_f = std::stof(argv[8]);
 
     IntComplex intComplex_num1(real_int, imag_int);   // create intComplex object 1
     IntComplex intComplex_num2(real2_int, imag2_int); // create intComplex object 2
 
-    // for FloatComplex object
-    float real = 0, imag = 0;
-    float real2 = 0, imag2 = 0;
-
-    while (real == 0 and imag == 0 and real2 == 0 and imag2 == 0)
-    {
-        cout << "Enter 4 float numbers. First 2 for complex number 1 and rest for number 2: ";
-        cin >> real >> imag >> real2 >> imag2;
-    }
-
-    FloatComplex floatComplex_num1(real, imag);   // create floatComplex object 1
-    FloatComplex floatComplex_num2(real2, imag2); // create floatComplex object 2
+    FloatComplex floatComplex_num1(real_f, imag_f);   // create floatComplex object 1
+    FloatComplex floatComplex_num2(real2_f, imag2_f); // create floatComplex object 2
 
     // Print all 4 complex numbers
     // .getImaginary() >= 0 ? " + " : " - " this check prints proper sign value of imag number
