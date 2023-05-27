@@ -41,3 +41,14 @@ FloatComplex FloatComplex::operator/(const FloatComplex &object)
     float imag_div = ((imaginary * object.real) - (real * object.imaginary)) / denom;  // ((b * c) - (a * d)) / (c^2 + d^2)
     return FloatComplex(real_div, imag_div);
 }
+
+// getter functions
+float FloatComplex::getReal() const
+{
+    return real;
+}
+
+float FloatComplex::getImaginary() const
+{
+    return imaginary;
+}
