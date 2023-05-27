@@ -16,6 +16,10 @@ public:
     IntComplex operator-(const IntComplex &object);
     IntComplex operator*(const IntComplex &object);
     IntComplex operator/(const IntComplex &object);
+    
+    // getter functions
+    int getReal() const;
+    int getImaginary() const;
 };
 
 #endif
